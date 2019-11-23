@@ -14,15 +14,15 @@ public class Renter extends Person{
 	
 	
 	
-	public Renter(Name n, Address ad, BirthDate bd) throws SQLException {
-		super(n, ad, bd);
+	public Renter(Name n, Address ad, BirthDate bd, int id) throws SQLException {
+		super(n, ad, bd,id);
 		 myConnection=DriverManager.getConnection("jdbc:mysql://localhost:3306/ensf480_testshcema", "yossri", "student");
 
 		// TODO Auto-generated constructor stub
 	}
 
 	public String listAll() throws SQLException {
-		Connection myconnection = null;
+
 		System.out.println("in renter list all");
 		String s="";
 		
@@ -31,7 +31,7 @@ public class Renter extends Person{
 		
 		while (myRs.next()) {
 			
-			s += "property number: "+myRs.getInt("property number")+ ", listing price: " + myRs.getInt("list price")+", location: " + myRs.getString("location")+" \0";
+			s += "property number: "+myRs.getInt("property_number")+ ", listing price: " + myRs.getInt("list_price")+", location: " + myRs.getString("location")+" \0";
 			System.out.println(s);
 		
 		}
@@ -39,7 +39,23 @@ public class Renter extends Person{
 		return s;
 		
 	}
+	/*
+	 * 
+	 * subscribes the renter as an observer to get notified
+	 */
+	public void subscribe() {
+		
+	}
+	/*
+	 * deletes their subscription
+	 */
 	
+	
+	public void unsubscribe() {
+		
+		
+		
+	}
 	
 	public String Search(String recieved) throws SQLException {
 		PreparedStatement myStmt= myConnection.prepareStatement("SELECT * FROM properties where propertyType LIKE ? AND nomBedroom LIKE ? AND nomBathroom LIKE ? AND furnished LIKE ? AND cityQuadrent LIKE ?");
@@ -85,7 +101,7 @@ public class Renter extends Person{
 		
 		while (myRs.next()) {
 			
-			sendBack += "property number: "+myRs.getInt("property number")+ ", listing price: " + myRs.getInt("list price")
+			sendBack += "property number: "+myRs.getInt("property_number")+ ", listing price: " + myRs.getInt("list_price")
 					+ ", cityQuadrent: " + myRs.getString("cityQuadrent")+", propertyType: " + myRs.getString("propertyType")
 							+ ", nomBedroom: " + myRs.getString("nomBedroom")+", nomBathroom: " + myRs.getString("nomBathroom")+
 							", furnished: " + myRs.getString("furnished")+" \0";
@@ -95,6 +111,40 @@ public class Renter extends Person{
 		System.out.println(sendBack);
 		
 		return sendBack;
+	}
+	 /**
+	  * 
+	  * note for youstina to gt more info biut the property like location and stuff so user knows whats up
+	  * @param PropertyID
+	  * @return
+	  * @throws SQLException
+	  */
+	public int searchPropertyOwner(int PropertyID) throws SQLException {
+		int id=0;
+		PreparedStatement myStmt= myConnection.prepareStatement("SELECT p.landlordID  FROM properties AS p WHERE p.propertyID = ?");
+		myStmt.setInt(1, PropertyID);
+		
+		ResultSet rS=myStmt.executeQuery();
+		while(rS.next()) {
+			id=rS.getInt("Landlord_ID");
+		}
+		
+		
+		return id;
+	}
+	
+	public void sendEmail(String emailToSend) throws SQLException {
+		String [] temp=emailToSend.split(";");
+		int propertyID=Integer.parseInt(temp[1]);
+		int landlordID=searchPropertyOwner(propertyID);
+		PreparedStatement myStmt= myConnection.prepareStatement("INSERT INTO messagestable(user_ID, message, propertyID) VALUES (?,?,?)");
+		myStmt.setString(2, temp[2]);
+		myStmt.setInt(1,landlordID);
+		myStmt.setInt(3, propertyID);
+		
+		myStmt.executeUpdate();
+		
+		
 	}
 
 }
