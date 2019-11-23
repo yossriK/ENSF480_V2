@@ -1,7 +1,8 @@
 package ClientGUI;
+// TEST TO SEE WHERE i AM at
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.PrintWriter;
+import java.io.PrintWriter;	
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.event.ChangeEvent;
@@ -22,6 +23,7 @@ import javax.swing.event.ChangeListener;
 public class RenterGUIController {
 	private RenterGUI mainGui;
 	private PrintWriter out;
+	public String searchContent;
 
 
 	
@@ -33,6 +35,7 @@ public class RenterGUIController {
 	public RenterGUIController(RenterGUI aGUI, PrintWriter out){
 		this.out = out;
 		this.mainGui = aGUI;
+		searchContent = new String("SEARCH,");
 		mainGui.addRentPropertyListener(new RentPropertyListener());
 		mainGui.addSearchPropertyByTypeListener(new SearchPropertyByTypeListener());
 		mainGui.addSearchByBedRoomNoListener(new SearchByBedRoomNoListener());
@@ -40,6 +43,7 @@ public class RenterGUIController {
 		mainGui.addSearchByFurnishedStateListener(new SearchByFurnishedStateListener());
 		mainGui.addsearchByCityQuadrantListener(new SearchByCityQuadrantListener());
 		mainGui.addExitListener(new ExitListener());
+		mainGui.addSearchPropertyListener(new SearchPropertiesListener() );
 
 
 		out.println(" ");
@@ -72,53 +76,78 @@ public class RenterGUIController {
 			}	
 	}
 }
+	
+	 String PropertyType="*,";
+
 	class SearchPropertyByTypeListener implements ChangeListener{
 		@Override
 		public void stateChanged(ChangeEvent e) {
-			if(((JSpinner)e.getSource()).getValue() == "Attached house") {
-				out.println("ATTACHEDHOUSE");
-			}
-			else if(((JSpinner)e.getSource()).getValue() == "Detached house") {
-				out.println("DETACHEDHOUSE");
-			}
-			else if(((JSpinner)e.getSource()).getValue() == "Townhouse") {
-				out.println("TOWNHOUSE");
-			}
-			else if(((JSpinner)e.getSource()).getValue() == "Appartment") {
-				out.println("APPARTMENT");
-			}
-			else if(((JSpinner)e.getSource()).getValue() == "none") {
-				out.println("NONE");
-			}
+			if(((JSpinner)e.getSource()).getValue().toString() == "none") {
+				PropertyType= "*,";
+			}else
+				PropertyType= ((JSpinner)e.getSource()).getValue().toString() + ",";
 		}
 	}
+	static String BedRoomNom="*,";
+
 	class SearchByBedRoomNoListener implements ChangeListener{
 		@Override
 		public void stateChanged(ChangeEvent e) {
-			System.out.println(((JSpinner)e.getSource()).getValue().toString());
-			out.println(((JSpinner)e.getSource()).getValue().toString()+"BED");
+			if(((JSpinner)e.getSource()).getValue().toString() == "0") {
+				BedRoomNom= "*,";
+			}else
+				BedRoomNom= ((JSpinner)e.getSource()).getValue().toString() + ",";
 
 	}
 	}
+	static String BathRoomNom="*,";
 	class SearchByBathRoomNoListener implements ChangeListener{
 		@Override
 		public void stateChanged(ChangeEvent e) {
-			out.println(((JSpinner)e.getSource()).getValue().toString()+"BATH");
+			if(((JSpinner)e.getSource()).getValue().toString() == "0") {
+				BathRoomNom= "*,";
+			}else
+			BathRoomNom= ((JSpinner)e.getSource()).getValue().toString() + ",";
 			}	
 		}
 	
+	static String FurnishedState="*,";
+
 	class SearchByFurnishedStateListener implements ChangeListener{
 		@Override
 		public void stateChanged(ChangeEvent e) {
-			out.println(((JSpinner)e.getSource()).getValue().toString());
+			if(((JSpinner)e.getSource()).getValue().toString() == "none") {
+				FurnishedState= "*,";
+			}else
+				
+				FurnishedState= ((JSpinner)e.getSource()).getValue().toString() + ",";
 			}
 		}
-	
+	static String CityQuad="*,";
+
 	class SearchByCityQuadrantListener implements ChangeListener{
 		@Override
 		public void stateChanged(ChangeEvent e) {
-			out.println(((JSpinner)e.getSource()).getValue().toString());
+			if(((JSpinner)e.getSource()).getValue().toString() == "none") {
+				CityQuad= "*";
+			}
+			else
+				CityQuad= ((JSpinner)e.getSource()).getValue().toString();
 		}
+	}
+	
+	
+	
+	
+	class SearchPropertiesListener implements ActionListener{
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			out.println("SEARCH,"+PropertyType+BedRoomNom+BathRoomNom+FurnishedState+CityQuad);
+			searchContent = "";
+		}
+		
 	}
 
 	class ExitListener implements ActionListener {
@@ -146,7 +175,7 @@ public class RenterGUIController {
 		
 	}
 	
-	
+	//setting text area to visible.
 	public void setVisible() {
 		this.mainGui.getFrame().setVisible(true);
 		
