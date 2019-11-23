@@ -1,8 +1,16 @@
 package ClientGUI;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.PrintWriter;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class LandLordGUIController {
@@ -48,15 +56,33 @@ public class LandLordGUIController {
 		 */
 		@Override
 		public void actionPerformed(ActionEvent e1) {
-			JTextField listingDetails = new JTextField();
-			Object[] message = {"Enter listing details: ", listingDetails};
-			
-			int option = JOptionPane.showConfirmDialog(null, message, "Listing a property",JOptionPane.OK_CANCEL_OPTION);
-			
-			if(option == JOptionPane.OK_OPTION)
-			{
-				out.println("POSTLISTING" +listingDetails.getText()) ;		
-		}
+			JFrame frame = new JFrame("POST PROPERTY");
+	       
+	        
+	        JTextField propertyType = new JTextField(10);
+	        JTextField cityQuad = new JTextField(10);
+	        JTextField listPrice = new JTextField(10);
+	        JTextField nomBedroom = new JTextField(10);
+	        JTextField nomBathroom = new JTextField(10);
+	        JTextField furnished = new JTextField(10);
+	        
+
+	        Object[] msg = {"propertyType:", propertyType, "cityQuad loaction:", cityQuad, "listing Price:",listPrice, " number of bedroom:",nomBedroom," number of bathroom:",nomBathroom, "furnished:",furnished};
+
+	      int  result = JOptionPane.showConfirmDialog(
+	            frame,
+	            msg,
+	            "Use default layout",
+	            JOptionPane.OK_CANCEL_OPTION,
+	            JOptionPane.PLAIN_MESSAGE);
+
+	        if (result == JOptionPane.YES_OPTION)
+	        {
+	            out.println("POSTPROPERTY,"+propertyType.getText() + "," + cityQuad.getText()+ "," + listPrice.getText()+ "," + nomBedroom.getText()+ "," + nomBathroom.getText()+ "," + furnished.getText());
+	        }
+	        
+	        
+
 	}
 }
 	class ChangePropertyStateListener implements ActionListener{
