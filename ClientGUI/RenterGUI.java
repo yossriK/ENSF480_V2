@@ -1,5 +1,6 @@
 package ClientGUI;
 
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionListener;
@@ -16,6 +17,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerNumberModel;
+import java.awt.event.ActionEvent;
 
 public class RenterGUI {
 	private JButton manageFeeBtn;
@@ -28,6 +30,7 @@ public class RenterGUI {
 	private JSpinner searchByBathRoomNoSpinner;
 	private JSpinner searchByFurnishedStateSpinner;
 	private JSpinner searchByCityQuadrantSpinner;
+	private JButton searchPropertyBtn;
 	private JFrame frame;
 
 	public JFrame getFrame() {
@@ -140,6 +143,23 @@ public class RenterGUI {
 		searchByCityQuadrantSpinner.setBounds(206, 412, 61, 22);
 		sidepanel.add(searchByCityQuadrantSpinner);
 		
+		JPanel panel_2 = new JPanel();
+		panel_2.setLayout(null);
+		panel_2.setBackground(new Color(85, 85, 118));
+		panel_2.setBounds(0, 448, 281, 57);
+		sidepanel.add(panel_2);
+		
+		JLabel label = new JLabel("");
+		label.setBounds(12, 0, 40, 57);
+		panel_2.add(label);
+		
+		searchPropertyBtn = new JButton("SEARCH");
+		searchPropertyBtn.setForeground(Color.BLACK);
+		searchPropertyBtn.setFont(new Font("Microsoft Sans Serif", Font.PLAIN, 13));
+		searchPropertyBtn.setBackground(new Color(204, 204, 204));
+		searchPropertyBtn.setBounds(92, 13, 166, 25);
+		panel_2.add(searchPropertyBtn);
+		
 		
 		JPanel headerPanel = new JPanel();
 		headerPanel.setBackground(new Color(122,71,221));
@@ -189,6 +209,9 @@ public class RenterGUI {
 	}
 	public void addsearchByCityQuadrantListener(ChangeListener listener) {
 		this.searchByCityQuadrantSpinner.addChangeListener(listener);
+	}
+	public void addSearchPropertyListener(ActionListener listener) {
+		this.searchPropertyBtn.addActionListener(listener);
 	}
 	/**
 	 * Assigns a listener to mamange fees of renters.
