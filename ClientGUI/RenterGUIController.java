@@ -2,9 +2,16 @@ package ClientGUI;
 // TEST TO SEE WHERE i AM at
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.PrintWriter;	
+import java.io.PrintWriter;
+
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -44,6 +51,7 @@ public class RenterGUIController {
 		mainGui.addsearchByCityQuadrantListener(new SearchByCityQuadrantListener());
 		mainGui.addExitListener(new ExitListener());
 		mainGui.addSearchPropertyListener(new SearchPropertiesListener() );
+		mainGui.addSendEmailsListener(new SendEmail());
 
 
 		out.println(" ");
@@ -76,6 +84,37 @@ public class RenterGUIController {
 			}	
 	}
 }
+	
+	
+	class SendEmail implements ActionListener{
+		/**
+		 * Creates a text field that takes input from user and prints it out to the socket with a unique indicator.
+		 */
+		@Override
+		public void actionPerformed(ActionEvent e1) {
+			 JPanel middlePanel = new JPanel ();
+			JFrame frame = new JFrame("POST PROPERTY");
+	       
+			
+	        JTextField propertyNumber = new JTextField(10);
+	        JTextArea Email = new JTextArea(5,20);
+	        JScrollPane scroll = new JScrollPane(Email);
+	        scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
+			middlePanel.add(scroll);	
+			frame.add(middlePanel);
+			Object[] message =  {"propertyNum:", propertyNumber, "Email:", Email, scroll};
+			int option = JOptionPane.showConfirmDialog(null, message,"Property to rent",JOptionPane.OK_CANCEL_OPTION);
+			
+			if(option == JOptionPane.OK_OPTION)
+			{
+				out.println("EMAIL;"+propertyNumber.getText()+";"+Email.getText());
+			}	
+	}
+}
+	
+	
+	
 	
 	 String PropertyType="*,";
 
